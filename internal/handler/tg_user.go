@@ -1022,11 +1022,7 @@ func (h *Handler) sendMainMenu(bot *tgbotapi.BotAPI, chatID int64) {
 		),
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("💎 Premium"),
-			tgbotapi.NewKeyboardButton("❗️Important"),
-		),
-		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton("🆘 Support"),
-			tgbotapi.NewKeyboardButton("📄 Our channels"),
 		),
 	)
 
