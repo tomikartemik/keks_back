@@ -16,77 +16,6 @@ import (
 func (h *Handler) HandleStart(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	telegramID := update.Message.From.ID
 
-	channelChatID := int64(-1002262695419)
-	member, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
-		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
-			ChatID: channelChatID,
-			UserID: telegramID,
-		},
-	})
-
-	if err != nil || (member.Status != "member" && member.Status != "administrator" && member.Status != "creator") {
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please subscribe to our channel to use the bot.")
-		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Subscribe", fmt.Sprintf("https://t.me/%s", "+GtMFfelO1ko1ZWIy")),
-			),
-			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonData("I am subscribed", "i_am_subscribed"),
-			),
-		)
-		bot.Send(msg)
-		return
-	}
-
-	// Остальная логика после проверки подписки...
-	existingUser, err := h.services.GetUserInfoById(int(telegramID))
-	if err == nil {
-		user, err := h.services.GetUserById(int(telegramID))
-		if err != nil {
-			// Отправка видео
-			video := tgbotapi.NewVideo(update.Message.Chat.ID, tgbotapi.FilePath("uploads/start.mp4"))
-			video.Caption = "Welcome to Hell Market Bot!\n\nHell Market Bot is the place where you can safely purchase products from trusted sellers and list your own items for sale.\nOur goal is to make interaction between people as safe and fast as possible.\n\nEach listing is manually reviewed, ensuring 100% compliance and quality of the material you purchase.\n\nYou can learn more about how bot works by clicking on the article below this message. The guide will explain how this bot operates.\n\nAll important information and FAQ will be collected in the \"Important\" section in the main menu.\n\nDisclaimer: Our service works only with verified sellers. Any actions outside the law of any country will be stopped and condemned. All actions within this bot are conducted strictly within the bounds of the law."
-			url := "https://telegra.ph/Instructions-for-working-with-the-bot-12-19"
-			video.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-				tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonURL("📘 Open Instructions", url),
-				),
-			)
-			bot.Send(video)
-
-			h.userStates[telegramID] = "username"
-
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please enter your name:")
-			bot.Send(msg)
-			return
-		}
-
-		isBlocked := user.Banned
-
-		if isBlocked {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "You are blocked and cannot use this bot.")
-			bot.Send(msg)
-			return
-		}
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf(
-			"Welcome back, %s!",
-			existingUser.Username,
-		))
-		bot.Send(msg)
-		h.sendMainMenu(bot, update.Message.Chat.ID)
-		return
-	}
-
-	video := tgbotapi.NewVideo(update.Message.Chat.ID, tgbotapi.FilePath("uploads/start.mp4"))
-	video.Caption = "Welcome to Hell Market Bot!\n\nHell Market Bot is the place where you can safely purchase products from trusted sellers and list your own items for sale.\nOur goal is to make interaction between people as safe and fast as possible.\n\nEach listing is manually reviewed, ensuring 100% compliance and quality of the material you purchase.\n\nYou can learn more about how bot works by clicking on the article below this message. The guide will explain how this bot operates.\n\nAll important information and FAQ will be collected in the \"Important\" section in the main menu.\n\nDisclaimer: Our service works only with verified sellers. Any actions outside the law of any country will be stopped and condemned. All actions within this bot are conducted strictly within the bounds of the law."
-	url := "https://telegra.ph/Instructions-for-working-with-the-bot-12-19"
-	video.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonURL("📘 Open Instructions", url),
-		),
-	)
-	bot.Send(video)
-
 	h.userStates[telegramID] = "username"
 
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please enter your name:")
@@ -196,58 +125,31 @@ func (h *Handler) HandleKeyboardButton(bot *tgbotapi.BotAPI, update tgbotapi.Upd
 		}
 		keyboard := tgbotapi.NewInlineKeyboardMarkup(
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/Luc1ferTheDevil"),
-				tgbotapi.NewInlineKeyboardButtonURL("❗️Terms of Premium", "https://telegra.ph/PREMIUM-02-20-3"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/tomikartemik"),
 			),
 		)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgText)
 		msg.ReplyMarkup = keyboard
 
-		bot.Send(msg)
-	case "❗️Important":
-		url := "https://telegra.ph/Instructions-for-working-with-the-bot-12-19"
-		url_2 := "https://telegra.ph/Controversial-situations-Help-12-30"
-		url_3 := "https://telegra.ph/User-Agreement-02-20-7"
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Click the button below to view important information.")
-		msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("📘 Open Instructions", url),
-				tgbotapi.NewInlineKeyboardButtonURL("📘 Controversial situations", url_2),
-				tgbotapi.NewInlineKeyboardButtonURL("📘User Agreement", url_3),
-			),
-		)
 		bot.Send(msg)
 	case "🆘 Support":
 		msgText := "If you have any questions or problems, our team is always ready to help you. You can contact the admin or the support to get the support you need. Also, if you have ideas or suggestions on how to improve our bot, we would love to hear them!\n\nPlease choose one of the following options:"
 
 		keyboard := tgbotapi.NewInlineKeyboardMarkup(
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/Luc1ferTheDevil"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/tomikartemik"),
 			),
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Support", "https://t.me/hspquick"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Support", "https://t.me/tomikartemik"),
 			),
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Suggest an Idea", "https://t.me/Luc1ferTheDevil"),
+				tgbotapi.NewInlineKeyboardButtonURL("Suggest an Idea", "https://t.me/tomikartemik"),
 			),
 		)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgText)
 		msg.ReplyMarkup = keyboard
-
-		bot.Send(msg)
-	case "📄 Our channels":
-		messageText := "Would be delighted if you check out our other projects listed below\\!\n\n" +
-			"❗️All titles are clickable\\!\n\n" +
-			"🔺 [HELL REFUND MAIN](https://t.me/\\+VtUPiZtDuX9hYTQy)\n\n" +
-			"🔺 [HELL REFUND BACKUP](https://t.me/\\+ZOU4LSpBvwc5ZmRi)\n\n" +
-			"🔺 [HELL REFUND CHAT](https://t.me/\\+3xhos0cIhTNhYmZi)\n\n" +
-			"🔺 [HELL BOXING](https://t.me/\\+X9-Ql8LQVDYyYmI6)\n\n" +
-			"🔺 [HELL CHECKIP BOT](https://t.me/hellcheckip_bot)"
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, messageText)
-		msg.ParseMode = "MarkdownV2"
 
 		bot.Send(msg)
 	default:
