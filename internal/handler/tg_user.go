@@ -16,10 +16,34 @@ import (
 func (h *Handler) HandleStart(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	telegramID := update.Message.From.ID
 
-	h.userStates[telegramID] = "username"
+	// Остальная логика после проверки подписки...
+	existingUser, err := h.services.GetUserInfoById(int(telegramID))
+	if err == nil {
+		user, err := h.services.GetUserById(int(telegramID))
+		if err != nil {
 
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please enter your name:")
-	bot.Send(msg)
+			h.userStates[telegramID] = "username"
+
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please enter your name:")
+			bot.Send(msg)
+			return
+		}
+
+		isBlocked := user.Banned
+
+		if isBlocked {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "You are blocked and cannot use this bot.")
+			bot.Send(msg)
+			return
+		}
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf(
+			"Welcome back, %s!",
+			existingUser.Username,
+		))
+		bot.Send(msg)
+		h.sendMainMenu(bot, update.Message.Chat.ID)
+		return
+	}
 }
 
 func (h *Handler) HandleKeyboardButton(bot *tgbotapi.BotAPI, update tgbotapi.Update, messageText string) {
