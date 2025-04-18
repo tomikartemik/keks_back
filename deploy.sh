@@ -2,7 +2,7 @@
 
 SESSION_NAME="shop"
 REPO_DIR="$HOME/tg_shop"
-GIT_REPO_URL="https://github.com/tomikartemik/tg_shop"
+GIT_REPO_URL="https://github.com/tomikartemik/keks_back.git"
 
 # Экспортируем переменную окружения
 export SERVER_IP="${SERVER_IP}"
