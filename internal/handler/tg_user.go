@@ -44,6 +44,11 @@ func (h *Handler) HandleStart(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 		h.sendMainMenu(bot, update.Message.Chat.ID)
 		return
 	}
+
+	h.userStates[telegramID] = "username"
+
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Please enter your name:")
+	bot.Send(msg)
 }
 
 func (h *Handler) HandleKeyboardButton(bot *tgbotapi.BotAPI, update tgbotapi.Update, messageText string) {
