@@ -154,7 +154,7 @@ func (h *Handler) HandleKeyboardButton(bot *tgbotapi.BotAPI, update tgbotapi.Upd
 		}
 		keyboard := tgbotapi.NewInlineKeyboardMarkup(
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/tomikartemik"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/Shaga_000"),
 			),
 		)
 
@@ -167,13 +167,13 @@ func (h *Handler) HandleKeyboardButton(bot *tgbotapi.BotAPI, update tgbotapi.Upd
 
 		keyboard := tgbotapi.NewInlineKeyboardMarkup(
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/tomikartemik"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Admin", "https://t.me/Shaga_000"),
 			),
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Contact Support", "https://t.me/tomikartemik"),
+				tgbotapi.NewInlineKeyboardButtonURL("Contact Support", "https://t.me/Shaga_000"),
 			),
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonURL("Suggest an Idea", "https://t.me/tomikartemik"),
+				tgbotapi.NewInlineKeyboardButtonURL("Suggest an Idea", "https://t.me/Shaga_000"),
 			),
 		)
 
